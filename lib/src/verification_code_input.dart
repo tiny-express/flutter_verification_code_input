@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class VerificationCodeInput extends StatefulWidget {
   VerificationCodeInput({this.onCompleted, this.keyboardType, this.length = 4});
@@ -7,14 +8,14 @@ class VerificationCodeInput extends StatefulWidget {
   final int length;
 
   @override
-  verificationCodeInputState createState() => new verificationCodeInputState(
+  _verificationCodeInputState createState() => new _verificationCodeInputState(
       onCompleted: onCompleted,
       keyboardType: this.keyboardType,
       length: length);
 }
 
-class verificationCodeInputState extends State<VerificationCodeInput> {
-  verificationCodeInputState(
+class _verificationCodeInputState extends State<VerificationCodeInput> {
+  _verificationCodeInputState(
       {this.onCompleted,
       this.keyboardType = TextInputType.number,
       this.length = 4});
@@ -27,52 +28,59 @@ class verificationCodeInputState extends State<VerificationCodeInput> {
   final List<TextEditingController> _listControllerText =
       <TextEditingController>[];
 
-  String getInputVerify() {
+  String _getInputVerify() {
     String verifycode = '';
     for (var i = 0; i < length; i++) {
-      verifycode += _listControllerText[i].text;
+      for(var index = 0; index < _listControllerText[i].text.length; index ++){
+        if(_listControllerText[i].text[index] != ' ') {
+          verifycode += _listControllerText[i].text[index];
+        }  
+      }
     }
-    print(verifycode);
     return verifycode;
   }
 
-  Widget createItem(int index) {
+  Widget _createItem(int index) {
     Flexible flexible = Flexible(
-        child: new TextField(
-      keyboardType: keyboardType,
-      enabled: _listControllerText[index].text.length == 1,
-      maxLines: 1,
-      maxLength: 1,
-      focusNode: _listFocusNode[index],
-      decoration: InputDecoration(
-          enabled: false,
+      child: new TextField(
+        keyboardType: keyboardType,
+        enabled: false,
+        maxLines: 1,
+        maxLength: 2,
+        focusNode: _listFocusNode[index],
+        decoration: InputDecoration(
+          enabled: true,
           counterText: "",
           contentPadding: new EdgeInsets.all(10.0),
           errorMaxLines: 1,
           fillColor: Colors.black),
-      onChanged: (String value) {
-        if (value.length > 0 && index < length) {
-          if (index == length - 1) {
-            widget.onCompleted(getInputVerify());
+        onChanged: (String value) {
+          if (value.length > 1 && index < length || index == 0 && value.isNotEmpty) {
+            if (index == length - 1) {
+              widget.onCompleted(_getInputVerify());
+              return;
+            }
+            _listControllerText[index + 1].value = new TextEditingValue(text: " ");
+            FocusScope.of(context).requestFocus(_listFocusNode[index + 1]);
             return;
           }
-          FocusScope.of(context).requestFocus(_listFocusNode[index + 1]);
-        }
-        if (value.isEmpty && index >= 0) {
-          FocusScope.of(context).requestFocus(_listFocusNode[index - 1]);
-        }
-      },
-      controller: _listControllerText[index],
-      maxLengthEnforced: true,
-      autocorrect: false,
-      textAlign: TextAlign.center,
-      autofocus: true,
-      style: new TextStyle(fontSize: 25.0, color: Colors.black),
-    ));
+          if (value.isEmpty && index >= 0) {
+             _listControllerText[index - 1].value = new TextEditingValue(text: " ");                       
+            FocusScope.of(context).requestFocus(_listFocusNode[index - 1]);
+          }
+        },
+        controller: _listControllerText[index],
+        maxLengthEnforced: true,
+        autocorrect: false,
+        textAlign: TextAlign.center,
+        autofocus: true,
+        style: new TextStyle(fontSize: 25.0, color: Colors.black),
+      ),
+    );
     return flexible;
   }
 
-  List<Widget> createListItem() {
+  List<Widget> _createListItem() {
     List<Widget> listWidget = <Widget>[];
     int numberVerification = length;
     if (_listFocusNode.isEmpty) {
@@ -83,7 +91,7 @@ class verificationCodeInputState extends State<VerificationCodeInput> {
     }
     for (var i = 0, j = 0; i < numberVerification * 2; i++) {
       if (i % 2 == 0) {
-        listWidget.add(createItem(j++));
+        listWidget.add(_createItem(j++));
       } else {
         if (j < numberVerification) {
           listWidget.add(new Padding(
@@ -101,7 +109,7 @@ class verificationCodeInputState extends State<VerificationCodeInput> {
       padding: new EdgeInsets.only(left: 50.0, right: 50.0),
       child: new Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: createListItem()),
+          children: _createListItem()),
     );
   }
 }
