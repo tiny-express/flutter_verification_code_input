@@ -30,4 +30,4 @@ import'package:flutter_verification_code_input/flutter_verification_code_input.d
 
 ## Showcase
 
-![Showcase](show_case.gif)
+![Showcase](show_case.gif=1440x2560)
