@@ -29,23 +29,29 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Example verify code'),
+        title: Center(child: new Text('Example verify code')),
       ),
-      body: new Center(
-          child: new Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          new Text('Verify code !!'),
-          new VerificationCodeInput(
-            keyboardType: TextInputType.number,
-            length: 4,
-            onCompleted: (String value) {
-              //...
-              print(value);
-            },
-          )
-        ],
-      )),
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text('Enter your code', style: TextStyle(fontSize: 20.0),),
+            ),
+            Expanded(
+              flex: 1,
+              child: VerificationCodeInput(
+                keyboardType: TextInputType.number,
+                length: 4,
+                padding: EdgeInsets.only(left: 80, right: 80),
+                onCompleted: (String value) {
+                  print(value);
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
