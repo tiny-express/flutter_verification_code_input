@@ -20,16 +20,19 @@ import'package:flutter_verification_code_input/flutter_verification_code_input.d
 ## Usage
 
 ```dart
-        new VerificationCodeInput(
-            keyboardType: TextInputType.number,
-            length: 4,
-            onCompleted: (String value) {
-              //...
-              print(value);
-            },
-        )
+  VerificationCodeInput(
+      keyboardType: TextInputType.number,
+      length: 4,
+      onCompleted: (String value) {
+        //...
+        print(value);
+      },
+  )
 ```
 
 ## Showcase
 
-![Showcase](show_case.gif)
+
+![Showcase|100x100, 10%](show_case.gif)
+
+

@@ -5,13 +5,16 @@ class VerificationCodeInput extends StatefulWidget {
   final TextInputType keyboardType;
   final int length;
   EdgeInsetsGeometry padding;
-  VerificationCodeInput({
-    Key key,
-    this.onCompleted,
-    this.keyboardType,
-    this.length = 4,
-    this.padding = const EdgeInsets.all(8.0),
-  }) : super(key: key);
+  BoxDecoration decoration;
+
+  VerificationCodeInput(
+      {Key key,
+      this.onCompleted,
+      this.keyboardType,
+      this.length = 4,
+      this.padding = const EdgeInsets.all(8.0),
+      this.decoration})
+      : super(key: key);
 
   @override
   _VerificationCodeInputState createState() =>
@@ -26,7 +29,6 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
 
   @override
   void initState() {
-    // _code[1] = '1'
     if (_listFocusNode.isEmpty) {
       for (var i = 0; i < widget.length; i++) {
         _listFocusNode.add(new FocusNode());
@@ -40,10 +42,10 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
   String _getInputVerify() {
     String verifycode = '';
     for (var i = 0; i < widget.length; i++) {
-      for(var index = 0; index < _listControllerText[i].text.length; index ++){
-        if(_listControllerText[i].text[index] != ' ') {
+      for (var index = 0; index < _listControllerText[i].text.length; index++) {
+        if (_listControllerText[i].text[index] != ' ') {
           verifycode += _listControllerText[i].text[index];
-        }  
+        }
       }
     }
     return verifycode;
@@ -64,7 +66,6 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
       onChanged: (String value) {
         if (value.length > 1 && index < widget.length ||
             index == 0 && value.isNotEmpty) {
-
           if (index == widget.length - 1) {
             widget.onCompleted(_getInputVerify());
             return;
@@ -117,22 +118,25 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
     }
   }
 
+  List<Widget> _buildListWidget() {
+    List<Widget> listWidget = List();
+    for (int index = 0; index < widget.length; index++) {
+      listWidget.add(Container(
+          height: 60,
+          width: 60,
+          padding: EdgeInsets.all(8.0),
+          child: _buildInputItem(index)));
+    }
+    return listWidget;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: widget.padding,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: widget.length,
-        itemBuilder: (BuildContext context, int index) {
-          return SizedBox(
-            height: 60,
-            width: 60,
-            child: Container(
-                padding: EdgeInsets.all(8.0), child: _buildInputItem(index)),
-          );
-        },
-      ),
-    );
+    return Container(
+        decoration: widget.decoration,
+        padding: widget.padding,
+        child: Row(
+          children: _buildListWidget(),
+        ));
   }
 }

@@ -23,7 +23,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  get key => null;
+  String _onCompleted = "";
 
   @override
   Widget build(BuildContext context) {
@@ -31,24 +31,39 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: new AppBar(
         title: Center(child: new Text('Example verify code')),
       ),
-      body: Center(
-        child: Column(
+      body: Container(
+        child: ListView(
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text('Enter your code', style: TextStyle(fontSize: 20.0),),
-            ),
-            Expanded(
-              flex: 1,
-              child: VerificationCodeInput(
-                keyboardType: TextInputType.number,
-                length: 4,
-                padding: EdgeInsets.only(left: 80, right: 80),
-                onCompleted: (String value) {
-                  print(value);
-                },
+              child: Center(
+                child: Text(
+                  'Enter your code',
+                  style: TextStyle(fontSize: 20.0),
+                ),
               ),
             ),
+            VerificationCodeInput(
+              keyboardType: TextInputType.number,
+              length: 4,
+              padding: EdgeInsets.only(left: 80, right: 80),
+              onCompleted: (String value) {
+                print(value);
+                setState(() {
+                  _onCompleted = value;
+                });
+              },
+            ),
+            (_onCompleted != "")
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text(
+                        'Your code: $_onCompleted',
+                      ),
+                    ),
+                  )
+                : Container(),
           ],
         ),
       ),
