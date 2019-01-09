@@ -31,41 +31,38 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: new AppBar(
         title: Center(child: new Text('Example verify code')),
       ),
-      body: Container(
-        child: ListView(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Center(
-                child: Text(
-                  'Enter your code',
-                  style: TextStyle(fontSize: 20.0),
-                ),
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Text(
+                'Enter your code',
+                style: TextStyle(fontSize: 20.0),
               ),
             ),
-            VerificationCodeInput(
-              keyboardType: TextInputType.number,
-              length: 4,
-              padding: EdgeInsets.only(left: 80, right: 80),
-              onCompleted: (String value) {
-                print(value);
-                setState(() {
-                  _onCompleted = value;
-                });
-              },
-            ),
-            (_onCompleted != "")
-                ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: Text(
-                        'Your code: $_onCompleted',
-                      ),
+          ),
+          VerificationCodeInput(
+            keyboardType: TextInputType.number,
+            length: 4,
+            onCompleted: (String value) {
+              print(value);
+              setState(() {
+                _onCompleted = value;
+              });
+            },
+          ),
+          (_onCompleted != "")
+              ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: Text(
+                      'Your code: $_onCompleted',
                     ),
-                  )
-                : Container(),
-          ],
-        ),
+                  ),
+                )
+              : Container(),
+        ],
       ),
     );
   }
