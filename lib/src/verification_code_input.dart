@@ -4,16 +4,16 @@ class VerificationCodeInput extends StatefulWidget {
   final ValueChanged<String> onCompleted;
   final TextInputType keyboardType;
   final int length;
-  EdgeInsetsGeometry padding;
-  BoxDecoration decoration;
+  BoxDecoration itemDecoration;
+  TextStyle textStyle;
 
   VerificationCodeInput(
       {Key key,
       this.onCompleted,
       this.keyboardType,
       this.length = 4,
-      this.padding = const EdgeInsets.all(8.0),
-      this.decoration})
+      this.itemDecoration,
+      this.textStyle = const TextStyle(fontSize: 25.0, color: Colors.black)})
       : super(key: key);
 
   @override
@@ -26,7 +26,7 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
   final List<TextEditingController> _listControllerText =
       <TextEditingController>[];
   Map<int, String> _code = Map();
-
+  int _currentIdex = 0;
   @override
   void initState() {
     if (_listFocusNode.isEmpty) {
@@ -52,13 +52,15 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
   }
 
   Widget _buildInputItem(int index) {
+    bool border = (widget.itemDecoration == null);
     return TextField(
       keyboardType: widget.keyboardType,
       maxLines: 1,
       maxLength: 2,
       focusNode: _listFocusNode[index],
       decoration: InputDecoration(
-          enabled: true,
+          border: (border ? null : InputBorder.none),
+          enabled: _currentIdex == index,
           counterText: "",
           contentPadding: new EdgeInsets.all(10.0),
           errorMaxLines: 1,
@@ -102,18 +104,24 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
       autocorrect: false,
       textAlign: TextAlign.center,
       autofocus: true,
-      style: new TextStyle(fontSize: 25.0, color: Colors.black),
+      style: widget.textStyle,
     );
   }
 
   void _next(int index) {
     if (index != widget.length) {
+      setState(() {
+        _currentIdex = index + 1;
+      });
       FocusScope.of(context).requestFocus(_listFocusNode[index + 1]);
     }
   }
 
   void _prev(int index) {
     if (index > 0) {
+      setState(() {
+        _currentIdex = index - 1;
+      });
       FocusScope.of(context).requestFocus(_listFocusNode[index - 1]);
     }
   }
@@ -121,10 +129,12 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
   List<Widget> _buildListWidget() {
     List<Widget> listWidget = List();
     for (int index = 0; index < widget.length; index++) {
+      double left = (index == 0) ? 0.0 : 5;
       listWidget.add(Container(
-          height: 60,
-          width: 60,
-          padding: EdgeInsets.all(8.0),
+          height: 50,
+          width: 50,
+          margin: EdgeInsets.only(left: left),
+          decoration: widget.itemDecoration,
           child: _buildInputItem(index)));
     }
     return listWidget;
@@ -132,11 +142,14 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: widget.decoration,
-        padding: widget.padding,
-        child: Row(
-          children: _buildListWidget(),
-        ));
+    return SizedBox(
+      height: 50,
+      width: (50 * widget.length + widget.length * 10).toDouble(),
+      child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: _buildListWidget(),
+          )),
+    );
   }
 }
