@@ -4,17 +4,20 @@ class VerificationCodeInput extends StatefulWidget {
   final ValueChanged<String> onCompleted;
   final TextInputType keyboardType;
   final int length;
+  final double itemSize;
   BoxDecoration itemDecoration;
   TextStyle textStyle;
-
   VerificationCodeInput(
       {Key key,
       this.onCompleted,
-      this.keyboardType,
+      this.keyboardType = TextInputType.number,
       this.length = 4,
       this.itemDecoration,
+      this.itemSize = 50,
       this.textStyle = const TextStyle(fontSize: 25.0, color: Colors.black)})
-      : super(key: key);
+      : assert(length > 0),
+        assert(itemSize > 0),
+        super(key: key);
 
   @override
   _VerificationCodeInputState createState() =>
@@ -62,7 +65,7 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
           border: (border ? null : InputBorder.none),
           enabled: _currentIdex == index,
           counterText: "",
-          contentPadding: new EdgeInsets.all(10.0),
+          contentPadding: EdgeInsets.all(((widget.itemSize * 2) / 10)),
           errorMaxLines: 1,
           fillColor: Colors.black),
       onChanged: (String value) {
@@ -129,10 +132,10 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
   List<Widget> _buildListWidget() {
     List<Widget> listWidget = List();
     for (int index = 0; index < widget.length; index++) {
-      double left = (index == 0) ? 0.0 : 5;
+      double left = (index == 0) ? 0.0 : (widget.itemSize / 10);
       listWidget.add(Container(
-          height: 50,
-          width: 50,
+          height: widget.itemSize,
+          width: widget.itemSize,
           margin: EdgeInsets.only(left: left),
           decoration: widget.itemDecoration,
           child: _buildInputItem(index)));
@@ -142,14 +145,11 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      width: (50 * widget.length + widget.length * 10).toDouble(),
-      child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: _buildListWidget(),
-          )),
-    );
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: _buildListWidget(),
+        ));
   }
 }
