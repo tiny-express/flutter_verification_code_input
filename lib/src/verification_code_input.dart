@@ -28,7 +28,7 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
   final List<FocusNode> _listFocusNode = <FocusNode>[];
   final List<TextEditingController> _listControllerText =
       <TextEditingController>[];
-  Map<int, String> _code = Map();
+  List<String> _code = List();
   int _currentIdex = 0;
   @override
   void initState() {
@@ -36,7 +36,7 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
       for (var i = 0; i < widget.length; i++) {
         _listFocusNode.add(new FocusNode());
         _listControllerText.add(new TextEditingController());
-        _code[i] = " ";
+        _code.add(' ');
       }
     }
     super.initState();
@@ -123,6 +123,9 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
   void _prev(int index) {
     if (index > 0) {
       setState(() {
+        if (_listControllerText[index].text.isEmpty) {
+          _listControllerText[index - 1].text = ' ';
+        }
         _currentIdex = index - 1;
       });
       FocusScope.of(context).requestFocus(_listFocusNode[index - 1]);
