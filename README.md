@@ -5,13 +5,10 @@
 ## Installing
 
 ```yaml
-dependencies:
-  flutter:
-    sdk: flutter
   flutter_verification_code_input:
     git:
       url: git://github.com/tiny-express/flutter_verification_code_input.git
-    version: ^0.1.1
+    version: ^0.1.2
 ```
 
 ```dart

@@ -5,8 +5,9 @@ class VerificationCodeInput extends StatefulWidget {
   final TextInputType keyboardType;
   final int length;
   final double itemSize;
-  BoxDecoration itemDecoration;
-  TextStyle textStyle;
+  final BoxDecoration itemDecoration;
+  final TextStyle textStyle;
+  final bool autofocus;
   VerificationCodeInput(
       {Key key,
       this.onCompleted,
@@ -14,7 +15,8 @@ class VerificationCodeInput extends StatefulWidget {
       this.length = 4,
       this.itemDecoration,
       this.itemSize = 50,
-      this.textStyle = const TextStyle(fontSize: 25.0, color: Colors.black)})
+      this.textStyle = const TextStyle(fontSize: 25.0, color: Colors.black),
+      this.autofocus = true})
       : assert(length > 0),
         assert(itemSize > 0),
         super(key: key);
@@ -106,7 +108,7 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
       maxLengthEnforced: true,
       autocorrect: false,
       textAlign: TextAlign.center,
-      autofocus: true,
+      autofocus: widget.autofocus,
       style: widget.textStyle,
     );
   }

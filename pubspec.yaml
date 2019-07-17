@@ -2,7 +2,7 @@ name: flutter_verification_code_input
 author: loinp <nploi1998@gmail.com>
 homepage: https://github.com/tiny-express/flutter_verification_code_input
 description: A Flutter package that help you create a verification input.
-version: 0.1.1
+version: 0.1.2
 
 environment:
   sdk: ">=2.1.0 <3.0.0"
