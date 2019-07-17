@@ -9,8 +9,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_verification_code_input:
-      git:
-        url: git://github.com/tinylife-io/flutter_verification_code_input.git
+    git:
+      url: git://github.com/tiny-express/flutter_verification_code_input.git
+    version: ^0.1.1
 ```
 
 ```dart
