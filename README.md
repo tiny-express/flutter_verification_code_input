@@ -7,7 +7,7 @@
 ```yaml
   flutter_verification_code_input:
     git:
-      url: git://github.com/tiny-express/flutter_verification_code_input.git
+      url: git://github.com/tiny-express/flutter_verification_code_input
     version: ^0.1.2
 ```
 
