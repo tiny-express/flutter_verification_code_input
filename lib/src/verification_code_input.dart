@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 class VerificationCodeInput extends StatefulWidget {
   final ValueChanged<String> onCompleted;
@@ -36,7 +37,9 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
   void initState() {
     if (_listFocusNode.isEmpty) {
       for (var i = 0; i < widget.length; i++) {
-        _listFocusNode.add(new FocusNode());
+        var focusNode = FocusNode();
+        focusNode.canRequestFocus = true;
+        _listFocusNode.add(focusNode);
         _listControllerText.add(new TextEditingController());
         _code.add(' ');
       }
@@ -118,7 +121,9 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
       setState(() {
         _currentIdex = index + 1;
       });
-      FocusScope.of(context).requestFocus(_listFocusNode[index + 1]);
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).requestFocus(_listFocusNode[index + 1]);
+      });
     }
   }
 
@@ -130,7 +135,9 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
         }
         _currentIdex = index - 1;
       });
-      FocusScope.of(context).requestFocus(_listFocusNode[index - 1]);
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).requestFocus(_listFocusNode[index - 1]);
+      });
     }
   }
 
