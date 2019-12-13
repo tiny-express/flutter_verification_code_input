@@ -37,9 +37,7 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
   void initState() {
     if (_listFocusNode.isEmpty) {
       for (var i = 0; i < widget.length; i++) {
-        var focusNode = FocusNode();
-        focusNode.canRequestFocus = true;
-        _listFocusNode.add(focusNode);
+        _listFocusNode.add(new FocusNode());
         _listControllerText.add(new TextEditingController());
         _code.add(' ');
       }
