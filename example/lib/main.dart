@@ -45,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
           VerificationCodeInput(
             keyboardType: TextInputType.number,
             length: 4,
+            forceUpperCase: false,
             autofocus: false,
             onCompleted: (String value) {
               print(value);
