@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 
 class VerificationCodeInput extends StatefulWidget {
   final ValueChanged<String> onCompleted;
@@ -9,8 +10,10 @@ class VerificationCodeInput extends StatefulWidget {
   final BoxDecoration itemDecoration;
   final TextStyle textStyle;
   final bool autofocus;
+  final bool forceUpperCase;
   VerificationCodeInput(
       {Key key,
+      this.forceUpperCase = true,
       this.onCompleted,
       this.keyboardType = TextInputType.number,
       this.length = 4,
@@ -111,6 +114,7 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
       textAlign: TextAlign.center,
       autofocus: widget.autofocus,
       style: widget.textStyle,
+      inputFormatters: widget.forceUpperCase ? [UpperCaseTextFormatter()] : [],
     );
   }
 
@@ -161,5 +165,16 @@ class _VerificationCodeInputState extends State<VerificationCodeInput> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: _buildListWidget(),
         ));
+  }
+}
+
+class UpperCaseTextFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    return TextEditingValue(
+      text: newValue.text?.toUpperCase(),
+      selection: newValue.selection,
+    );
   }
 }
